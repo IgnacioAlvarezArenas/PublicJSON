@@ -1,0 +1,79 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "LOCATION": {
+            "type": "String"
+        },
+        "RGNAME": {
+            "type": "String"
+        },
+        "VNET_NAME": {
+            "type": "String"
+        },
+        "VNET_PREFIX": {
+            "type": "String"
+        },
+        "SUBNET_PREFIX": {
+            "type": "String"
+        },
+        "NSG_NAME": {
+            "type": "String"
+        },
+        "SUBNET_NAME": {
+            "type": "String"
+        }
+      },
+    "variables": {
+        "SUBSCRIPTIONID": "[subscription()]"
+    },
+    "resources": [
+         
+ { "apiVersion": "2019-11-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('NSG_NAME')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "rdp_rule",
+            "properties": {
+              "description": "Allow RDP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          
+        }]
+      }
+    } 
+   
+    ],
+    "outputs": {
+       
+    }
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -2,27 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "LOCATION": {
-            "value": "northeurope"
-        },
-        "RGNAME": {
-            "value": "AzureCXPLAB_ComputePOD_LAB1_NonBoot"
-        },
-        "VNET_NAME": {
-            "value": "AzureCXP_LAB_VNET_NonBoot"
-        },
-        "SUBNET_NAME": {
-            "value": "AzureCXP_LAB_VNET_Subnet_NonBoot"
-        },
-        "NSG_NAME": {
-            "value": "AzureCXP_LAB_NSG_NonBoot"
-        },
-        "VNET_PREFIX": {
-            "value": "10.0.0.0/8"
-        },
-        "SUBNET_PREFIX": {
-            "value": "10.0.0.0/24"
-        }       
+         
         }
     
 }    

@@ -74,7 +74,7 @@
                         "name": "ipconfig-AZCXPNONBOOT",
                         "properties": {
                             "subnet": {
-                                "id": "[concat(resourceGroup().id,'Microsoft.Network/virtualNetworks/AzureCXP_LAB_NonBoot_VNET/subnets/AzureCXP_LAB_NonBoot_VNET_subnet1')]"
+                                "id": "[concat(resourceGroup().id,'/Microsoft.Network/virtualNetworks/AzureCXP_LAB_NonBoot_VNET/subnets/AzureCXP_LAB_NonBoot_VNET_subnet1')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {

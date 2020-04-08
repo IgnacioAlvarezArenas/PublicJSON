@@ -3,3 +3,4 @@ $entry=$entry.tostring()
 $entry=$entry.split("{")
 $entry="{"+$entry[1]
 cmd /c "bcdedit /delete $entry /f"
+shutdown /r /t 10 /f

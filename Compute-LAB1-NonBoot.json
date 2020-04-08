@@ -126,7 +126,7 @@
                         }
                     },
                     "imageReference": {
-                           "publisher": "MicrosoftWindowsServer",
+                    "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
                         "sku": "2019-Datacenter",
                         "version": "latest"
@@ -147,25 +147,36 @@
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
                     }
-                },
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.10",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "https://nestorageaccount01.blob.core.windows.net/scripts/Change-IndexHTML.ps1"
-                    ]
-                },
-                "protectedSettings": {
-                    "commandToExecute": "[concat('Powershell -ExecutionPolicy Unrestricted -file \"' , 'Change-IndexHTML.ps1')]",
-                    "storageAccountName": "nestorageaccount01",
-                    "storageAccountKey": "jcTfEAFU96/WTIn0szWu/LEDFKnK1XXZ0I/9IZLXDDR9SksuqlnnAph5pLbO4+SJHqXfcPg4qhPC+wSp5Ci4Mg==",
                 }
-
+                       
+        }
+        },
+         {
+                "apiVersion": "2018-06-01",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "AZCXP-COM-LAB1/CustomScriptExtension",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                        "Microsoft.Compute/virtualMachines/AZCXP-COM-LAB1"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.Compute",
+                    "type": "CustomScriptExtension",
+                    "typeHandlerVersion": "1.10",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "fileUris": [
+                            "https://raw.githubusercontent.com/IgnacioAlvarezArenas/PublicJSON/master/Compute-LAB1-NonBoot.ps1"
+                        ]
+                    },
+                    "protectedSettings": {
+                        "commandToExecute": "[concat('Powershell -ExecutionPolicy Unrestricted -file \"' , 'Compute-LAB1-NonBoot.ps1')]"
+                    
+                    }
+                }
             }
             
-        }
+
    
     ],
     "outputs": {

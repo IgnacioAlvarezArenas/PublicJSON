@@ -2,7 +2,12 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
- 
+         "adminUsername": {
+            "type": "String"
+        },
+        "adminPassword": {
+            "type": "SecureString"
+        }
       },
     "variables": {
        
@@ -63,35 +68,36 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2018-10-01",
-            "name": "AZCXPNONBOOT-nic1",
+            "name": "AZCXP-COM-LAB1-nic1",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "AZCXPNONBOOT-pip1"
+                "AZCXP-COM-LAB1-pip1",
+                "AzureCXP_LAB_NonBoot_VNET_subnet1"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig-AZCXPNONBOOT",
+                        "name": "ipconfig-AZCXP-COM-LAB1",
                         "properties": {
                             "subnet": {
-                                "id": "[concat(resourceGroup().id,'/Microsoft.Network/virtualNetworks/AzureCXP_LAB_NonBoot_VNET/subnets/AzureCXP_LAB_NonBoot_VNET_subnet1')]"
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_LAB_NonBoot_VNET/subnets/AzureCXP_LAB_NonBoot_VNET_subnet1')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[concat(resourceGroup().id,'/Microsoft.Network/publicIpAddresses/AZCXPNONBOOT-pip1')]"
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/publicIpAddresses/AZCXP-COM-LAB1-pip1')]"
                             }
                         }
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[concat(resourceGroup().id,'/Microsoft.Network/networkSecurityGroups/AzureCXP_LAB_NonBoot_NSG')]"
+                    "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkSecurityGroups/AzureCXP_LAB_NonBoot_NSG')]"
                 }
             }
         },
         {
             "type": "Microsoft.Network/PublicIPAddresses",
             "apiVersion": "2019-02-01",
-            "name": "AZCXPNONBOOT-pip1",
+            "name": "AZCXP-COM-LAB1-pip1",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Basic"
@@ -103,14 +109,14 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-10-01",
-            "name": "AZCXPNONBOOT",
+            "name": "AZCXP-COM-LAB1",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "Microsoft.Network/networkInterfaces/AZCXPNONBOOT-nic1"
+                "Microsoft.Network/networkInterfaces/AZCXP-COM-LAB1-nic1"
             ],
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_"
+                    "vmSize": "Standard_D2_v2"
                 },
                 "storageProfile": {
                     "osDisk": {
@@ -129,19 +135,34 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[concat(resourceGroup().id,'/Microsoft.Network/networkInterfaces/AZCXPNONBOOT-nic1')]"
+                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkInterfaces/AZCXP-COM-LAB1-nic1')]"
                         }
                     ]
                 },
                 "osProfile": {
-                    "computerName": "AZCXPNONBOOT",
-                    "adminUsername": "natxoadmin",
-                    "adminPassword": "Wedolearning1!",
+                    "computerName": "AZCXP-COM-LAB1",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
                     }
+                },
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "https://nestorageaccount01.blob.core.windows.net/scripts/Change-IndexHTML.ps1"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('Powershell -ExecutionPolicy Unrestricted -file \"' , 'Change-IndexHTML.ps1')]",
+                    "storageAccountName": "nestorageaccount01",
+                    "storageAccountKey": "jcTfEAFU96/WTIn0szWu/LEDFKnK1XXZ0I/9IZLXDDR9SksuqlnnAph5pLbO4+SJHqXfcPg4qhPC+wSp5Ci4Mg==",
                 }
+
             }
             
         }

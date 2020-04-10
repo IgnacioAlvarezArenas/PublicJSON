@@ -146,7 +146,14 @@
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
-                    }
+                    },
+                     "dataDisks": [
+                {   
+                    "name": "AZCXP-COM-LAB1-DataDisk"
+                    "diskSizeGB": 32,
+                    "lun": 0,
+                    "createOption": "Empty"
+                }
                 }
                        
         }
@@ -182,23 +189,4 @@
     "outputs": {
        
     }
-} 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+}

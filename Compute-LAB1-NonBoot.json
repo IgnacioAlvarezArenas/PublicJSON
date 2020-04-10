@@ -153,10 +153,10 @@
                     "diskSizeGB": 32,
                     "lun": 0,
                     "createOption": "Empty"
-                }
-                }
-                       
-        }
+                }]
+            }
+        }           
+        
         },
          {
                 "apiVersion": "2018-06-01",

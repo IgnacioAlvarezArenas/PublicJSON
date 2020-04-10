@@ -130,7 +130,14 @@
                         "offer": "WindowsServer",
                         "sku": "2019-Datacenter",
                         "version": "latest"
-                    }
+                    },
+                "dataDisks": [
+                {   
+                    "name": "AZCXP-COM-LAB1-DataDisk",
+                    "diskSizeGB": 32,
+                    "lun": 0,
+                    "createOption": "Empty"
+                }]
                 },
                 "networkProfile": {
                     "networkInterfaces": [
@@ -146,14 +153,8 @@
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
-                    },
-                     "dataDisks": [
-                {   
-                    "name": "AZCXP-COM-LAB1-DataDisk",
-                    "diskSizeGB": 32,
-                    "lun": 0,
-                    "createOption": "Empty"
-                }]
+                    }
+             
             }
         }           
         

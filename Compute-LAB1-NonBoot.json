@@ -149,7 +149,7 @@
                     },
                      "dataDisks": [
                 {   
-                    "name": "AZCXP-COM-LAB1-DataDisk"
+                    "name": "AZCXP-COM-LAB1-DataDisk",
                     "diskSizeGB": 32,
                     "lun": 0,
                     "createOption": "Empty"

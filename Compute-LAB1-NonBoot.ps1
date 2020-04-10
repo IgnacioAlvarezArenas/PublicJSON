@@ -6,7 +6,6 @@ $entry=$entry[1]
 $entry=$entry.tostring()
 $entry=$entry.split("{")
 $entry="{"+$entry[1]
-#cmd /c "bcdedit /delete $entry /f"
 cmd /c "bcdedit /set $entry device partition=F:"
 cmd /c "bcdedit /set $entry osdevice partition=F:"
 shutdown /r /t 10 /f

@@ -167,7 +167,7 @@
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                         "fileUris": [
-                            "https://raw.githubusercontent.com/IgnacioAlvarezArenas/PublicJSON/master/ComputeSTG-LAB1-FileShare"
+                            "https://raw.githubusercontent.com/IgnacioAlvarezArenas/PublicJSON/master/ComputeSTG-LAB1-FileShare.ps1"
                         ]
                     },
                     "protectedSettings": {

@@ -155,7 +155,7 @@
          {
                 "apiVersion": "2018-06-01",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "AZCXP-COM-LAB1/CustomScriptExtension",
+                "name": "AZCXP-STG-LAB1/CustomScriptExtension",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
                         "Microsoft.Compute/virtualMachines/AZCXP-STG-LAB1"

@@ -13,9 +13,11 @@
         }
       },
     "variables": {
+
+      
        
     },
-    "resources": [
+"resources": [
     
          
  { "apiVersion": "2019-11-01",
@@ -88,7 +90,7 @@
           "location": "[resourceGroup().location]",
           "name": "GatewaySubnet",
           "dependsOn": [
-            "AzureCXP_Network_LAB1_VNET"
+            "AzureCXP_Network_LAB1_VNET1"
           ],
           "properties": {
             "addressPrefix": "10.0.1.0/27"
@@ -224,7 +226,8 @@
                 "count": 2
             }
         },
-          {
+     
+        {
             "type": "Microsoft.Network/PublicIPAddresses",
             "apiVersion": "2019-02-01",
             "name": "[concat('AZCXP-NW-LAB1-VPN-pip',copyIndex(1))]",
@@ -233,13 +236,14 @@
                 "name": "Basic"
             },
             "properties": {
-                "publicIpAllocationMethod": "Dynamic"
+                "publicIpAllocationMethod": "static"
             },
             "copy": {
                 "name": "copypipvpn",
                 "count": 2
             }
-        },
+        },   
+    
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-10-01",
@@ -389,12 +393,12 @@
         "ipConfigurations": [
           {
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "Static",
               "subnet": {
                 "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_Network_LAB1_VNET1/subnets/GatewaySubnet')]"
               },
               "publicIPAddress": {
-                "id": "[concat(resourceGroup().id,'/Microsoft.Network/publicIPAddresses/AZCXP-NW-LAB1-VPN-pip1')]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses','AZCXP-NW-LAB1-VPN-pip1')]"
               }
             },
             "name": "vnetGatewayConfig"
@@ -404,7 +408,7 @@
         "vpnType": "RouteBased",
         "enableBgp": false
       }
-    }.
+    },
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Network/virtualNetworkGateways",
@@ -423,10 +427,10 @@
                 "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_Network_LAB1_VNET2/subnets/GatewaySubnet')]"
               },
               "publicIPAddress": {
-                "id": "[concat(resourceGroup().id,'/Microsoft.Network/publicIPAddresses/AZCXP-NW-LAB1-VPN-pip2')]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses','AZCXP-NW-LAB1-VPN-pip2')]"
               }
             },
-            "name": "vnetGatewayConfig"
+            "name": "vnetGatewayConfig2"
           }
         ],
         "gatewayType": "Vpn",
@@ -445,8 +449,8 @@
             "10.0.0.0/16"
           ]
         },
-        "gatewayIpAddress": "AZCXP-NW-LAB1-VPN-pip2",
-        },
+        "gatewayIpAddress": "[reference(resourceId('Microsoft.Network/publicIPAddresses','AZCXP-NW-LAB1-VPN-pip2')).IpAddress]"
+         },
         "dependsOn": [
         "copypipvpn"
         ] 
@@ -462,12 +466,13 @@
             "10.0.0.0/16"
           ]
         },
-        "gatewayIpAddress": "AZCXP-NW-LAB1-VPN-pip1"
+        "gatewayIpAddress": "[reference(resourceId('Microsoft.Network/publicIPAddresses','AZCXP-NW-LAB1-VPN-pip1')).IpAddress]"
+        
         },
 
         "dependsOn": [
         "copypipvpn"
-        ]
+         ]
     },
     {
       "apiVersion": "2018-07-01",
@@ -492,7 +497,7 @@
     },
     {
       "apiVersion": "2018-07-01",
-      "name": "AZCXP_NW_LAB_VNET1toVNET2_Conn",
+      "name": "AZCXP_NW_LAB_VNET2toVNET1_Conn",
       "type": "Microsoft.Network/connections",
       "location": "[resourceGroup().location]",
       "dependsOn": [
@@ -517,5 +522,6 @@
     ],
     "outputs": {
        
+      }
     }
-}
+

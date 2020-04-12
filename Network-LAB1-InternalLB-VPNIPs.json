@@ -1,0 +1,44 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+         
+      },
+    "variables": {
+
+        
+    },
+"resources": [
+    
+         
+        {
+            "type": "Microsoft.Network/PublicIPAddresses",
+            "apiVersion": "2019-02-01",
+            "name": "[concat('AZCXP-NW-LAB1-VPN-pip',copyIndex(1))]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIpAllocationMethod": "Static"
+            },
+            "copy": {
+                "name": "copypip",
+                "count": 2
+            }
+        }
+
+  
+        
+    ],
+    "outputs": {
+       "pip1output": {
+          "type": "object",
+          "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'AZCXP-NW-LAB1-VPN-pip1'),'2019-02-01', 'Full')]"
+                },
+        "pip2output": {
+          "type": "object",
+          "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'AZCXP-NW-LAB1-VPN-pip2'),'2019-02-01', 'Full')]"
+    }
+}
+}

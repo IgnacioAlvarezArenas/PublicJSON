@@ -1,0 +1,320 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+         "adminUsername": {
+            "type": "String"
+        },
+        "adminPassword": {
+            "type": "SecureString"
+        }
+      },
+    "variables": {
+       
+    },
+    "resources": [
+    
+         
+ { "apiVersion": "2019-11-01",
+       "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "AzureCXP_Network_LAB1_NSG",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "rdp_rule",
+            "properties": {
+              "description": "Allow RDP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+        },
+         {
+            "name": "HTTP_rule",
+            "properties": {
+              "description": "Allow HTTP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "10.0.0.0/16",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+        }
+        
+    ]
+      }
+    },
+
+    {
+      "apiVersion": "2018-10-01",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "AzureCXP_Network_LAB1_VNET",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+        },      
+      "resources": [
+        {
+          "apiVersion": "2018-10-01",
+          "type": "subnets",
+          "location": "[resourceGroup().location]",
+          "name": "AzureCXP_Network_LAB1_VNET_subnet1",
+          "dependsOn": [
+            "AzureCXP_Network_LAB1_VNET"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.0.0/24"
+          }
+        },
+        {
+          "apiVersion": "2018-10-01",
+          "type": "subnets",
+          "location": "[resourceGroup().location]",
+          "name": "AzureCXP_Network_LAB1_VNET_subnet2",
+          "dependsOn": [
+            "AzureCXP_Network_LAB1_VNET"
+          ],
+          "properties": {
+            "addressPrefix": "10.0.1.0/24"
+          }
+        }
+      ]
+    
+    },              
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-10-01",
+            "name": "AZCXP-NW-LAB1-nic2",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "AZCXP-NW-LAB1-pip2",
+                "AzureCXPNetwork_LAB1_VNET_subnet2"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name":  "ipconfig-AZCXP-NW-LAB1-2",
+                        "properties": {
+                            "subnet": {
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_Network_LAB1_VNET/subnets/AzureCXP_Network_LAB1_VNET_subnet2')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/publicIpAddresses/AZCXP-NW-LAB1-pip2')]"
+                            },
+                             "loadBalancerBackendAddressPools": [
+                            {
+                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/loadBalancers/AZCXP-NW-LAB1-ILB1/backendAddressPools/BackendPool1')]"
+                            }]
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkSecurityGroups/AzureCXP_Network_LAB1_NSG')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-10-01",
+            "name": "AZCXP-NW-LAB1-nic1",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "AZCXP-NW-LAB1-pip2",
+                "AzureCXPNetwork_LAB1_VNET_subnet1"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name":  "ipconfig-AZCXP-NW-LAB1-1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_Network_LAB1_VNET/subnets/AzureCXP_Network_LAB1_VNET_subnet1')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/publicIpAddresses/AZCXP-NW-LAB1-pip1')]"
+                            }
+                             
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkSecurityGroups/AzureCXP_Network_LAB1_NSG')]"
+                }
+            }
+        }
+        
+        
+        ,
+        {
+            "type": "Microsoft.Network/PublicIPAddresses",
+            "apiVersion": "2019-02-01",
+            "name": "[concat('AZCXP-NW-LAB1-pip',copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIpAllocationMethod": "Dynamic"
+            },
+            "copy": {
+                "name": "copypip",
+                "count": 2
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2018-10-01",
+            "name": "[concat('AZCXP-NW-LAB1-',copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/AZCXP-NW-LAB1-nic',copyIndex())]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2_v2"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    }
+                   ,
+                    "imageReference": {
+                    "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    }
+                },  
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkInterfaces/AZCXP-NW-LAB1-nic',copyIndex())]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[concat('AZCXP-NW-LAB1-',copyIndex())]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true
+                    }               
+            
+                }
+            },
+             "copy": {
+                "name": "copyVM",
+                "count": 2
+             
+            }
+
+        },
+        {
+                "apiVersion": "2018-06-01",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "AZCXP-COM-LAB1/CustomScriptExtension",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                        "Microsoft.Compute/virtualMachines/AZCXP-NW-LAB1-2"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.Compute",
+                    "type": "CustomScriptExtension",
+                    "typeHandlerVersion": "1.10",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "fileUris": [
+                            "https://raw.githubusercontent.com/IgnacioAlvarezArenas/PublicJSON/master/Network-LAB1-InternalLB.ps1"
+                        ]
+                    },
+                    "protectedSettings": {
+                        "commandToExecute": "[concat('Powershell -ExecutionPolicy Unrestricted -file \"' , 'Network-LAB1-InternalLB.ps1')]"
+                    
+                    }
+                }
+        },
+     {
+      "apiVersion": "2018-04-01",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "AZCXP-NW-LAB1-ILB1",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "AzureCXP_Network_LAB1_VNET"
+      ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "properties": {
+              "subnet": {
+                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_Network_LAB1_VNET/subnets/AzureCXP_Network_LAB1_VNET_subnet2')]"
+              },
+              "privateIPAddress": "10.0.1.100",
+              "privateIPAllocationMethod": "Static"
+            },
+            "name": "AZCXP-NW-LAB1-ILB1-FEIP"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "BackendPool1"
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/loadBalancers/AZCXP-NW-LAB1-ILB1/frontendIpConfigurations/AZCXP-NW-LAB1-ILB1-FEIP')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/loadBalancers/AZCXP-NW-LAB1-ILB1/backendAddressPools/BackendPool1')]"
+              },
+              "probe": {
+                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/loadBalancers/AZCXP-NW-LAB1-ILB1/probes/lbprobe')]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 80,
+              "backendPort": 80,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbrule"
+          }
+        ],
+        "probes": [
+          {
+            "properties": {
+              "protocol": "Tcp",
+              "port": 80,
+              "intervalInSeconds": 15,
+              "numberOfProbes": 2
+            },
+            "name": "lbprobe"
+          }
+        ]
+      }
+    } 
+
+          
+    ],
+    "outputs": {
+       
+    }
+}

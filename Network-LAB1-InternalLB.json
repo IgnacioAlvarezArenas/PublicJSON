@@ -45,7 +45,7 @@
               "sourceAddressPrefix": "10.0.0.0/16",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 100,
+              "priority": 110,
               "direction": "Inbound"
             }
         }
@@ -100,8 +100,10 @@
             "name": "AZCXP-NW-LAB1-nic2",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "AZCXP-NW-LAB1-pip2",
-                "AzureCXPNetwork_LAB1_VNET_subnet2"
+                "AzureCXP_Network_LAB1_VNET",
+                "AzureCXP_Network_LAB1_VNET_subnet2",
+                "copypip",
+                "AZCXP-NW-LAB1-ILB1"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -133,8 +135,9 @@
             "name": "AZCXP-NW-LAB1-nic1",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "AZCXP-NW-LAB1-pip2",
-                "AzureCXPNetwork_LAB1_VNET_subnet1"
+                "AzureCXP_Network_LAB1_VNET",
+                "AzureCXP_Network_LAB1_VNET_subnet1",
+                "copypip"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -163,7 +166,7 @@
         {
             "type": "Microsoft.Network/PublicIPAddresses",
             "apiVersion": "2019-02-01",
-            "name": "[concat('AZCXP-NW-LAB1-pip',copyIndex())]",
+            "name": "[concat('AZCXP-NW-LAB1-pip',copyIndex(1))]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Basic"
@@ -179,10 +182,10 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-10-01",
-            "name": "[concat('AZCXP-NW-LAB1-',copyIndex())]",
+            "name": "[concat('AZCXP-NW-LAB1-',copyIndex(1))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/AZCXP-NW-LAB1-nic',copyIndex())]"
+                "[concat('Microsoft.Network/networkInterfaces/AZCXP-NW-LAB1-nic',copyIndex(1))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -206,12 +209,12 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkInterfaces/AZCXP-NW-LAB1-nic',copyIndex())]"
+                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkInterfaces/AZCXP-NW-LAB1-nic',copyIndex(1))]"
                         }
                     ]
                 },
                 "osProfile": {
-                    "computerName": "[concat('AZCXP-NW-LAB1-',copyIndex())]",
+                    "computerName": "[concat('AZCXP-NW-LAB1-',copyIndex(1))]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
@@ -231,10 +234,10 @@
         {
                 "apiVersion": "2018-06-01",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "AZCXP-COM-LAB1/CustomScriptExtension",
+                "name": "AZCXP-NW-LAB1-2/CustomScriptExtension",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
-                        "Microsoft.Compute/virtualMachines/AZCXP-NW-LAB1-2"
+                        "copyVM"
                 ],
                 "properties": {
                     "publisher": "Microsoft.Compute",
@@ -258,7 +261,7 @@
       "name": "AZCXP-NW-LAB1-ILB1",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "AzureCXP_Network_LAB1_VNET"
+        "AzureCXP_Network_LAB1_VNET_subnet2"
       ],
       "properties": {
         "frontendIPConfigurations": [
@@ -298,6 +301,7 @@
             "Name": "lbrule"
           }
         ],
+    
         "probes": [
           {
             "properties": {

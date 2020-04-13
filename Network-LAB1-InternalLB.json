@@ -126,10 +126,8 @@
           "addressPrefixes": [
             "172.16.0.0/16"
           ]
-        },
-         "dependson": [
-              "AzureCXP_Network_LAB1_VNET2"
-         ]
+        }
+         
         },      
       "resources": [
         {

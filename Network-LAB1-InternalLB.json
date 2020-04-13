@@ -139,7 +139,10 @@
           "name": "AzureCXP_Network_LAB1_VNET2_subnet1",
           "properties": {
             "addressPrefix": "172.16.0.0/24"
-          }
+          },
+          "dependson": [
+              "AzureCXP_Network_LAB1_VNET2"
+         ]
         },
         {
           "apiVersion": "2018-10-01",

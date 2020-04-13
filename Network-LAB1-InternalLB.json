@@ -94,7 +94,10 @@
           "name": "AzureCXP_Network_LAB1_VNET1_subnet1",
           "properties": {
             "addressPrefix": "10.0.0.0/24"
-          }
+          },
+           "dependson": [
+              "AzureCXP_Network_LAB1_VNET1"
+         ]
         },
         {
           "apiVersion": "2018-10-01",
@@ -103,7 +106,10 @@
           "name": "GatewaySubnet",
           "properties": {
           "addressPrefix": "10.0.1.0/27"
-          }
+          },
+          "dependson": [
+              "AzureCXP_Network_LAB1_VNET1"
+         ]
         }
       ]
     
@@ -120,7 +126,10 @@
           "addressPrefixes": [
             "172.16.0.0/16"
           ]
-        }
+        },
+         "dependson": [
+              "AzureCXP_Network_LAB1_VNET2"
+         ]
         },      
       "resources": [
         {
@@ -139,7 +148,10 @@
           "name": "GatewaySubnet",
           "properties": {
             "addressPrefix": "172.16.1.0/27"
-          }
+          },
+           "dependson": [
+              "AzureCXP_Network_LAB1_VNET2"
+         ]
         }
       ]
     

@@ -130,14 +130,7 @@
                         "offer": "WindowsServer",
                         "sku": "2016-Datacenter",
                         "version": "14393.3630.2004101604"
-                    },
-                "dataDisks": [
-                {   
-                    "name": "AZCXP-COM-LAB2c-DataDisk",
-                    "diskSizeGB": 32,
-                    "lun": 0,
-                    "createOption": "Empty"
-                }]
+                    }
                 },
                 "networkProfile": {
                     "networkInterfaces": [

@@ -68,23 +68,23 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2018-10-01",
-            "name": "AZCXP-COM-LAB2c-nic1",
+            "name": "AZCXP-COM-LAB2-nic1",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "AZCXP-COM-LAB2c-pip1",
+                "AZCXP-COM-LAB2-pip1",
                 "AzureCXP_LAB2_NonBoot_VNET_subnet1"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig-AZCXP-COM-LAB2c",
+                        "name": "ipconfig-AZCXP-COM-LAB2",
                         "properties": {
                             "subnet": {
                                 "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/virtualNetworks/AzureCXP_LAB2_NonBoot_VNET/subnets/AzureCXP_LAB2_NonBoot_VNET_subnet1')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/publicIpAddresses/AZCXP-COM-LAB2c-pip1')]"
+                                "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/publicIpAddresses/AZCXP-COM-LAB2-pip1')]"
                             }
                         }
                     }
@@ -97,7 +97,7 @@
         {
             "type": "Microsoft.Network/PublicIPAddresses",
             "apiVersion": "2019-02-01",
-            "name": "AZCXP-COM-LAB2c-pip1",
+            "name": "AZCXP-COM-LAB2-pip1",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Basic"
@@ -109,10 +109,10 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-10-01",
-            "name": "AZCXP-COM-LAB2c",
+            "name": "AZCXP-COM-LAB2",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "Microsoft.Network/networkInterfaces/AZCXP-COM-LAB2c-nic1"
+                "Microsoft.Network/networkInterfaces/AZCXP-COM-LAB2-nic1"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -129,18 +129,18 @@
                     "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
                         "sku": "2016-Datacenter",
-                        "version": "2016.127.20190416"
+                        "version": "latest"
                     }
                 },
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkInterfaces/AZCXP-COM-LAB2c-nic1')]"
+                            "id": "[concat(resourceGroup().id,'/providers/Microsoft.Network/networkInterfaces/AZCXP-COM-LAB2-nic1')]"
                         }
                     ]
                 },
                 "osProfile": {
-                    "computerName": "AZCXP-COM-LAB2c",
+                    "computerName": "AZCXP-COM-LAB2",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
@@ -154,10 +154,10 @@
          {
                 "apiVersion": "2018-06-01",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "AZCXP-COM-LAB2c/CustomScriptExtension",
+                "name": "AZCXP-COM-LAB2/CustomScriptExtension",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
-                        "Microsoft.Compute/virtualMachines/AZCXP-COM-LAB2c"
+                        "Microsoft.Compute/virtualMachines/AZCXP-COM-LAB2"
                 ],
                 "properties": {
                     "publisher": "Microsoft.Compute",

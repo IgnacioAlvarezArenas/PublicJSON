@@ -116,7 +116,7 @@
             ],
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_D2_v2"
+                    "vmSize": "Standard_D2s_v3"
                 },
                 "storageProfile": {
                     "osDisk": {
@@ -129,7 +129,7 @@
                     "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
                         "sku": "2016-Datacenter",
-                        "version": "14393.3630.2004101604"
+                        "version": "2016.127.20190416"
                     }
                 },
                 "networkProfile": {

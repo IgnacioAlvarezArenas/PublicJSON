@@ -128,8 +128,8 @@
                     "imageReference": {
                     "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
-                        "sku": "2019-Datacenter",
-                        "version": "latest"
+                        "sku": "2016-Datacenter",
+                        "version": "14393.3630.2004101604"
                     },
                 "dataDisks": [
                 {   

